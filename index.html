@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrendLab - AI Video Ideas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        /* Container Principal */
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ÉCRAN DE CONNEXION */
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 80vh;
+        }
+
+        /* ÉCRAN PRINCIPAL (Caché au début) */
+        .main-app {
+            display: none;
+        }
+
+        /* AD ZONE */
+        .ad-zone-top, .ad-zone-bottom {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-zone-bottom {
+            margin-top: 30px;
+            margin-bottom: 0;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            font-size: 14px;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        /* Form Box - Glassmorphic */
+        .form-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 45px 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .form-box:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-question {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Input Field */
+        .input-field {
+            width: 100%;
+            padding: 16px 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            color: white;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-field:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Platform Grid */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .platform-btn {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+
+        .platform-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .platform-btn.active {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 14px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Loading & Results */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top: 3px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 18px;
+        }
+
+        @keyframes spin {
+            0 { transform: rotate(0deg); }
+            100 { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .ideas-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .idea-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 18px;
+            font-size: 14px;
+            line-height: 1.6;
+            backdrop-filter: blur(10px);
+        }
+
+        .idea-number {
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* Messages */
+        .message {
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            display: none;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .error-message {
+            background: rgba(255, 100, 100, 0.2);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            color: rgba(255, 200, 200, 0.95);
+        }
+
+        .success-message {
+            background: rgba(100, 255, 100, 0.2);
+            border: 1px solid rgba(100, 255, 100, 0.3);
+            color: rgba(200, 255, 200, 0.95);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 45px;
+            padding: 20px 0;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 480px) {
+            .platform-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- 1. ÉCRAN DE CONNEXION -->
+        <div class="login-screen" id="loginScreen">
+            <div class="header">
+                <div class="logo">TL</div>
+                <h1>TrendLab</h1>
+                <p class="tagline">Welcome back! Please sign in.</p>
+            </div>
+
+            <div class="message error-message" id="loginError"></div>
+
+            <div class="form-box">
+                <form onsubmit="handleLogin(event); return false;">
+                    <div class="input-group">
+                        <label class="input-label">Email Address</label>
+                        <input type="email" id="loginEmail" class="input-field" placeholder="name@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Password</label>
+                        <input type="password" id="loginPassword" class="input-field" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="action-btn" style="margin-top: 10px;">Sign In</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. L'APPLICATION PRINCIPALE (Masquée au début) -->
+        <div class="main-app" id="mainApp">
+            <!-- AD ZONE TOP -->
+            <div class="ad-zone-top">
+                Advertisement - Insert Adsterra Script Here
+            </div>
+
+            <div class="header">
+                <div class="logo">TL</div>
+                <h1>TrendLab</h1>
+                <p class="tagline">AI Video Ideas from Current Trends</p>
+            </div>
+
+            <div class="message error-message" id="errorMessage"></div>
+            <div class="message success-message" id="successMessage"></div>
+
+            <form onsubmit="generateIdeas(event); return false;">
+                <div class="form-box">
+                    <p class="form-question">What's your niche?</p>
+                    <input type="text" class="input-field" id="niche" placeholder="Gaming, Cooking, Fitness..." required />
+                </div>
+
+                <div class="form-box">
+                    <p class="form-question">Select your platform</p>
+                    <div class="platform-grid">
+                        <button type="button" class="platform-btn active" data-platform="tiktok">TikTok</button>
+                        <button type="button" class="platform-btn" data-platform="youtube">YouTube</button>
+                        <button type="button" class="platform-btn" data-platform="instagram">Instagram</button>
+                        <button type="button" class="platform-btn" data-platform="twitch">Twitch</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="action-btn" id="generateBtn">Generate Ideas</button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="color: rgba(255,255,255,0.7); font-size:14px;">Finding trending ideas...</p>
+            </div>
+
+            <div class="results" id="results">
+                <div class="form-box" style="margin-top: 30px;">
+                    <p class="results-title">Your Trending Ideas</p>
+                    <div class="ideas-container" id="ideasContainer"></div>
+                </div>
+            </div>
+
+            <!-- AD ZONE BOTTOM -->
+            <div class="ad-zone-bottom">
+                Advertisement - Insert Adsterra Script Here
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Powered by Claude AI
+        </div>
+    </div>
+
+    <script>
+        let selectedPlatform = 'tiktok';
+
+        // Système de Connexion Simple (Simulation)
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const loginError = document.getElementById('loginError');
+
+            // Modifie ici si tu veux mettre un mot de passe spécifique temporaire
+            if (email && password.length >= 4) {
+                // Succès : On masque la connexion, on affiche l'application
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+            } else {
+                loginError.textContent = "Invalid email or password (min 4 characters).";
+                loginError.classList.add('show');
+            }
+        }
+
+        // Boutons de changement de plateforme
+        document.querySelectorAll('.platform-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedPlatform = this.dataset.platform;
+            });
+        });
+
+        // Appel API Claude
+        async function generateIdeas(event) {
+            event.preventDefault();
+            const niche = document.getElementById('niche').value.trim();
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const errorMessage = document.getElementById('errorMessage');
+            const ideasContainer = document.getElementById('ideasContainer');
+
+            errorMessage.classList.remove('show');
+            results.classList.remove('show');
+
+            generateBtn.disabled = true;
+            loading.classList.add('active');
+
+            try {
+                const response = await fetch('/api/generateIdeas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ niche, platform: selectedPlatform })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || `Error ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.ideas && data.ideas.length > 0) {
+                    ideasContainer.innerHTML = data.ideas.map((idea, index) => `
+                        <div class="idea-card">
+                            <span class="idea-number">${index + 1}.</span>${idea}
+                        </div>
+                    `).join('');
+                    results.classList.add('show');
+                    showSuccess('Ideas generated!');
+                } else {
+                    throw new Error('No ideas found.');
+                }
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                generateBtn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        function showError(message) {
+            const err = document.getElementById('errorMessage');
+            err.textContent = message;
+            err.classList.add('show');
+        }
+
+        function showSuccess(message) {
+            const succ = document.getElementById('successMessage');
+            succ.textContent = message;
+            succ.classList.add('show');
+            setTimeout(() => succ.classList.remove('show'), 2000);
+        }
+    </script>
+</body>
+</html>
